@@ -90,11 +90,11 @@ resource "aws_lb_listener" "app_listener" {
 
 // Autoscaling group using the existing launch template
 resource "aws_autoscaling_group" "web_asg" {
-  name                      = "playroom-web-asg"
-  max_size                  = 2
-  min_size                  = 1
-  desired_capacity          = 1
-  vpc_zone_identifier       = [aws_subnet.private-subnet-us-east-1a.id, aws_subnet.private-subnet-us-east-1b.id]
+  name                = "playroom-web-asg"
+  max_size            = 2
+  min_size            = 1
+  desired_capacity    = 1
+  vpc_zone_identifier = [aws_subnet.private-subnet-us-east-1a.id, aws_subnet.private-subnet-us-east-1b.id]
   launch_template {
     id      = aws_launch_template.web-application-tier-template.id
     version = "$Latest"

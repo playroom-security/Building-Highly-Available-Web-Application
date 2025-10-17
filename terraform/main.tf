@@ -9,9 +9,9 @@ resource "aws_vpc" "main" {
 
 # Create public subnets in different availability zones
 resource "aws_subnet" "public-subnet-us-east-1a" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnet_1_cidr_block
-  availability_zone = "us-east-1a"
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public_subnet_1_cidr_block
+  availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
   tags = {
@@ -19,9 +19,9 @@ resource "aws_subnet" "public-subnet-us-east-1a" {
   }
 }
 resource "aws_subnet" "public-subnet-us-east-1b" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnet_2_cidr_block
-  availability_zone = "us-east-1b"
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public_subnet_2_cidr_block
+  availability_zone       = "us-east-1b"
   map_public_ip_on_launch = true
 
   tags = {
@@ -74,7 +74,7 @@ resource "aws_route" "vpc_route" {
   route_table_id         = aws_route_table.playroom-igw-route-table.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.playroom-lab-igw.id
-  
+
 }
 
 # Associate the route table with the public subnets

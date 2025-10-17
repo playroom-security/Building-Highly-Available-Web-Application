@@ -21,3 +21,7 @@ output "alb_dns_name" {
 output "asg_name" {
   value = aws_autoscaling_group.web_asg.name
 }
+
+output "efs_id" {
+  value = aws_efs_file_system.app_efs.id
+}

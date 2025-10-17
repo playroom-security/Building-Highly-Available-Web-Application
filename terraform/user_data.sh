@@ -6,9 +6,7 @@ apt-get update -y
 apt-get install -y nginx git
 apt-get install -y mysql-client
 apt-get install -y php-fpm php-mysql php-cli php-curl php-json php-mbstring php-xml php-zip
-apt-get install -y php-gd php-intl
-apt-get install -y php-bcmath php-soap
-apt-get install -y php-imagick
+
 
 
 # Start and enable Nginx
@@ -283,6 +281,21 @@ fi
 /usr/local/bin/composer require aws/aws-sdk-php:^3.0 --no-interaction || true
 
 chown -R www-data:www-data /var/www/html/app
+
+# Install amazon-efs-utils for mounting EFS
+apt-get update -y || true
+apt-get install -y amazon-efs-utils nfs-common || true
+
+# Mount EFS if EFS_ID available
+EFS_ID=$(grep EFS_ID /etc/profile.d/app_env.sh 2>/dev/null | cut -d'=' -f2 | tr -d '"') || true
+if [ -n "$EFS_ID" ]; then
+	mkdir -p /var/www/html/app/shared
+	# mount using efs-utils (recommended) and persist to fstab
+	echo "${EFS_ID}:/ /var/www/html/app/shared efs defaults,_netdev 0 0" >> /etc/fstab || true
+	mount -a || true
+		# Ensure the mounted EFS directory is owned by the webserver user so PHP can write to it
+		chown -R www-data:www-data /var/www/html/app/shared || true
+fi
 
 # Configure Nginx site to serve the app at root /app
 cat >/etc/nginx/sites-available/app.conf <<'NGINX'

@@ -82,6 +82,7 @@ resource "aws_launch_template" "web-application-tier-template" {
       rds_db_name   = aws_db_instance.students.db_name,
       rds_username  = aws_db_instance.students.username,
       db_secret_arn = aws_secretsmanager_secret.db_credentials.arn,
+      efs_id        = aws_efs_file_system.app_efs.id,
       user_data_raw = file("${path.module}/user_data.sh")
     })
   )
